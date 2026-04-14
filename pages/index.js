@@ -1,7 +1,5 @@
 import Head from 'next/head'
 import { useState } from 'react'
-import styles from '../styles/globals.css'
-
 export default function Home({ jobs, stats }) {
   const [search, setSearch] = useState('')
   const [activeCity, setActiveCity] = useState('全部')
