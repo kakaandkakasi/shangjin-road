@@ -1,0 +1,11 @@
+node_modules/
+.next/
+out/
+.env
+.env.local
+*.log
+.DS_Store
+
+# Large data files - download separately
+public/data/jobs.json
+public/data/stats.json
