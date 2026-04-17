@@ -28,7 +28,7 @@ export default function Home({ jobs, stats }) {
       <Head>
         <title>赏金之路 - AI求职情报</title>
         <meta name="description" content="AI驱动的求职情报平台，发现最适合你的AI时代岗位" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       </Head>
 
       {/* Header */}
