@@ -777,8 +777,10 @@ body::after {
 .main-content {
   opacity: 0;
   transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
 }
 
 .main-content--visible {
   opacity: 1;
+  pointer-events: auto;
 }
