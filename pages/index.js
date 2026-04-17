@@ -3,8 +3,13 @@ import { useState } from 'react'
 export default function Home({ jobs, stats }) {
   const [search, setSearch] = useState('')
   const [activeCity, setActiveCity] = useState('全部')
+  const [activeDirection, setActiveDirection] = useState('全部')
 
-  const cities = ['全部', ...Object.keys(stats.cities).slice(0, 6)]
+  // 所有方向（从数据中提取，去重排序）
+  const directions = ['全部', 'AI算法-大模型', 'AIGC内容创作', 'AI产品经理', 'AI运营', '智能驾驶', 'AI芯片-硬件', 'AI视频生成', 'AI机器人', 'AI医疗']
+  
+  // 城市列表
+  const cities = ['全部', ...Object.keys(stats.cities)]
   
   const filteredJobs = jobs.filter(job => {
     const matchesSearch = !search || 
@@ -13,8 +18,9 @@ export default function Home({ jobs, stats }) {
       job.direction.toLowerCase().includes(search.toLowerCase())
     
     const matchesCity = activeCity === '全部' || job.city === activeCity
+    const matchesDirection = activeDirection === '全部' || job.direction === activeDirection
     
-    return matchesSearch && matchesCity
+    return matchesSearch && matchesCity && matchesDirection
   })
 
   return (
@@ -63,8 +69,9 @@ export default function Home({ jobs, stats }) {
         </div>
       </section>
 
-      {/* Filters */}
+      {/* City Filters */}
       <section className="container">
+        <div className="filters-label">城市</div>
         <div className="filters">
           {cities.map(city => (
             <button
@@ -73,6 +80,23 @@ export default function Home({ jobs, stats }) {
               onClick={() => setActiveCity(city)}
             >
               {city}
+              {city !== '全部' && <span className="filter-count">{stats.cities[city] || 0}</span>}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* Direction Filters */}
+      <section className="container">
+        <div className="filters-label">方向</div>
+        <div className="filters">
+          {directions.map(dir => (
+            <button
+              key={dir}
+              className={`filter-tag ${activeDirection === dir ? 'active' : ''}`}
+              onClick={() => setActiveDirection(dir)}
+            >
+              {dir}
             </button>
           ))}
         </div>
@@ -88,7 +112,7 @@ export default function Home({ jobs, stats }) {
           </div>
           
           <div className="jobs-grid">
-            {filteredJobs.slice(0, 30).map((job, i) => (
+            {filteredJobs.slice(0, 50).map((job, i) => (
               <div key={i} className="job-card">
                 <div className="job-header">
                   <h3 className="job-title">{job.title}</h3>
@@ -132,33 +156,15 @@ export default function Home({ jobs, stats }) {
 }
 
 export async function getStaticProps() {
-  // Sample data for demo - will be replaced with actual export
-  const sampleJobs = [
-    { title: 'AIGC算法工程师', company: '杭州星纪元科技', city: '杭州', direction: 'AI算法-大模型', salary: '30-50K', source: 'https://zhipin.com' },
-    { title: 'Prompt工程师', company: '华晟互娱', city: '杭州', direction: 'AI算法-大模型', salary: '15-25K', source: 'https://zhipin.com' },
-    { title: 'AI产品经理', company: '字节跳动', city: '北京', direction: 'AI产品经理', salary: '35-60K', source: 'https://zhipin.com' },
-    { title: '大模型算法工程师', company: '百川智能', city: '北京', direction: 'AI算法-大模型', salary: '40-80K', source: 'https://zhipin.com' },
-    { title: 'AI运营专员', company: '网易游戏', city: '杭州', direction: 'AI运营', salary: '12-20K', source: 'https://zhipin.com' },
-    { title: '智能驾驶算法工程师', company: '小马智行', city: '广州', direction: '智能驾驶', salary: '35-70K', source: 'https://zhipin.com' },
-    { title: 'AI视频生成工程师', company: '生数科技', city: '北京', direction: 'AI视频生成', salary: '30-55K', source: 'https://zhipin.com' },
-    { title: 'AI医疗产品经理', company: '医联科技', city: '成都', direction: 'AI医疗', salary: '20-35K', source: 'https://zhipin.com' },
-  ]
-
-  const stats = {
-    total: 8681,
-    cities: {
-      '杭州': 326,
-      '北京': 506,
-      '上海': 297,
-      '深圳': 396,
-      '广州': 514,
-      '成都': 522,
-    }
-  }
+  const fs = require('fs')
+  const path = require('path')
+  
+  const jobs = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'public/data/jobs.json'), 'utf8'))
+  const stats = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'public/data/stats.json'), 'utf8'))
 
   return {
     props: {
-      jobs: sampleJobs,
+      jobs,
       stats,
     },
   }
