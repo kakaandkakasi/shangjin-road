@@ -156,7 +156,13 @@ export default function Home({ jobs, stats }) {
                   <span className="job-tag city">{job.city}</span>
                 </div>
                 {job.source ? (
-                  <a href={job.source} target="_blank" rel="noopener noreferrer" className="job-link">
+                  <a 
+                    href={job.source.startsWith('http') ? job.source : `https://${job.source}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="job-link"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     查看详情 →
                   </a>
                 ) : (

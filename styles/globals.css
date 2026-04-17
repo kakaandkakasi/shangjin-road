@@ -41,7 +41,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Background Gradient - Giulio Style */
+/* Background Gradient - Giulio Style with Flow Animation */
 body::before {
   content: '';
   position: fixed;
@@ -55,6 +55,50 @@ body::before {
     radial-gradient(ellipse 50% 40% at 20% 80%, rgba(168, 85, 247, 0.05), transparent);
   pointer-events: none;
   z-index: 0;
+  animation: gradientFlow 15s ease-in-out infinite;
+}
+
+/* Flowing Background Animation */
+@keyframes gradientFlow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  33% {
+    opacity: 0.85;
+    transform: scale(1.05) translateY(-10px);
+  }
+  66% {
+    opacity: 0.9;
+    transform: scale(1.02) translateY(5px);
+  }
+}
+
+/* Second Layer for depth */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  background: 
+    radial-gradient(ellipse 30% 40% at 80% 20%, rgba(99, 102, 241, 0.06), transparent),
+    radial-gradient(ellipse 40% 50% at 10% 60%, rgba(168, 85, 247, 0.04), transparent);
+  pointer-events: none;
+  z-index: 0;
+  animation: gradientFlow2 20s ease-in-out infinite;
+}
+
+@keyframes gradientFlow2 {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1) translateX(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1) translateX(20px);
+  }
 }
 
 .container {
@@ -193,6 +237,65 @@ body::before {
   position: relative;
 }
 
+/* Entry loading bar */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--accent-secondary), transparent);
+  animation: loadingBar 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+@keyframes loadingBar {
+  0% {
+    width: 0;
+    opacity: 1;
+  }
+  100% {
+    width: 100%;
+    opacity: 0;
+  }
+}
+
+/* Floating particles effect in hero */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0;
+  animation: floatParticle 4s ease-in-out infinite;
+  box-shadow: 
+    80vw -20vh 0 0 rgba(168, 85, 247, 0.3),
+    20vw 30vh 0 0 rgba(99, 102, 241, 0.2),
+    60vw 60vh 0 0 rgba(168, 85, 247, 0.2),
+    -30vw -10vh 0 0 rgba(99, 102, 241, 0.25);
+}
+
+@keyframes floatParticle {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(0) scale(1);
+  }
+  25% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.4;
+    transform: translateY(-30px) scale(1.2);
+  }
+  75% {
+    opacity: 0.6;
+  }
+}
+
 .hero-content {
   max-width: 800px;
 }
@@ -228,6 +331,34 @@ body::before {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Shimmer effect on title */
+.hero h1::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  50%, 100% {
+    left: 100%;
+  }
 }
 
 .hero-subtitle {
