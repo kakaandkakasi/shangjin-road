@@ -1,16 +1,19 @@
 import Head from 'next/head'
 import { useState } from 'react'
+
 export default function Home({ jobs, stats }) {
+  // State for filters
   const [search, setSearch] = useState('')
   const [activeCity, setActiveCity] = useState('全部')
   const [activeDirection, setActiveDirection] = useState('全部')
 
-  // 所有方向（从数据中提取，去重排序）
+  // All directions
   const directions = ['全部', 'AI算法-大模型', 'AIGC内容创作', 'AI产品经理', 'AI运营', '智能驾驶', 'AI芯片-硬件', 'AI视频生成', 'AI机器人', 'AI医疗']
   
-  // 城市列表
+  // Cities
   const cities = ['全部', ...Object.keys(stats.cities)]
   
+  // Filter jobs
   const filteredJobs = jobs.filter(job => {
     const matchesSearch = !search || 
       job.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -34,15 +37,15 @@ export default function Home({ jobs, stats }) {
       {/* Header */}
       <header className="header">
         <div className="container header-content">
-          <div className="logo">
+          <div className="logo animate-fade-in-up delay-1">
             <div className="logo-icon">赏</div>
-            赏金之路
+            <span>赏金之路</span>
           </div>
-          <nav className="nav">
+          <nav className="nav animate-fade-in delay-3">
             <a href="#" className="nav-link">情报库</a>
             <a href="#" className="nav-link">关于</a>
           </nav>
-          <div className="stats">
+          <div className="stats animate-fade-in delay-4">
             <span className="stats-count">{stats.total}</span> 条情报
           </div>
         </div>
@@ -51,54 +54,71 @@ export default function Home({ jobs, stats }) {
       {/* Hero */}
       <section className="hero">
         <div className="container">
-          <h1>找到你的下一个机会</h1>
-          <p>AI驱动的求职情报，帮你发现AI时代的最佳岗位</p>
-          <div className="search-box">
-            <input 
-              type="text" 
-              className="search-input"
-              placeholder="搜索岗位、公司、技能方向..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <svg className="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8"/>
-              <path d="m21 21-4.35-4.35"/>
-            </svg>
+          <div className="hero-content">
+            <p className="hero-eyebrow animate-fade-in-up delay-1">
+              AI驱动 · 精准匹配 · 实时更新
+            </p>
+            <h1 className="animate-fade-in-up delay-2">
+              找到你的下一个机会
+            </h1>
+            <p className="hero-subtitle animate-fade-in-up delay-3">
+              覆盖北京、上海、深圳、杭州、广州等10+核心城市，精选AI时代最优质的求职情报
+            </p>
+            <div className="search-box animate-fade-in-up delay-4">
+              <input 
+                type="text" 
+                className="search-input"
+                placeholder="搜索岗位、公司、技能方向..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <svg className="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+              </svg>
+            </div>
           </div>
         </div>
       </section>
 
       {/* City Filters */}
-      <section className="container">
-        <div className="filters-label">城市</div>
-        <div className="filters">
-          {cities.map(city => (
-            <button
-              key={city}
-              className={`filter-tag ${activeCity === city ? 'active' : ''}`}
-              onClick={() => setActiveCity(city)}
-            >
-              {city}
-              {city !== '全部' && <span className="filter-count">{stats.cities[city] || 0}</span>}
-            </button>
-          ))}
+      <section className="filters-section">
+        <div className="container">
+          <div className="filters-header animate-fade-in-up delay-5">
+            <span className="filters-label">城市</span>
+          </div>
+          <div className="filters animate-fade-in-up delay-5">
+            {cities.map(city => (
+              <button
+                key={city}
+                className={`filter-tag ${activeCity === city ? 'active' : ''}`}
+                onClick={() => setActiveCity(city)}
+              >
+                {city}
+                {city !== '全部' && <span className="filter-count"> {stats.cities[city]}</span>}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Direction Filters */}
-      <section className="container">
-        <div className="filters-label">方向</div>
-        <div className="filters">
-          {directions.map(dir => (
-            <button
-              key={dir}
-              className={`filter-tag ${activeDirection === dir ? 'active' : ''}`}
-              onClick={() => setActiveDirection(dir)}
-            >
-              {dir}
-            </button>
-          ))}
+      <section className="filters-section">
+        <div className="container">
+          <div className="filters-header">
+            <span className="filters-label">方向</span>
+          </div>
+          <div className="filters">
+            {directions.map(dir => (
+              <button
+                key={dir}
+                className={`filter-tag ${activeDirection === dir ? 'active' : ''}`}
+                onClick={() => setActiveDirection(dir)}
+              >
+                {dir}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -109,11 +129,14 @@ export default function Home({ jobs, stats }) {
             <span className="section-title">
               {filteredJobs.length} 个职位
             </span>
+            <span className="section-count">
+              找到 {filteredJobs.length > 50 ? '50+' : filteredJobs.length} 条相关职位
+            </span>
           </div>
           
           <div className="jobs-grid">
             {filteredJobs.slice(0, 50).map((job, i) => (
-              <div key={i} className="job-card">
+              <div key={i} className="job-card animate-fade-in-up" style={{ animationDelay: `${0.1 + i * 0.03}s` }}>
                 <div className="job-header">
                   <h3 className="job-title">{job.title}</h3>
                 </div>
@@ -132,10 +155,14 @@ export default function Home({ jobs, stats }) {
                   <span className="job-tag">{job.direction}</span>
                   <span className="job-tag city">{job.city}</span>
                 </div>
-                {job.source && (
+                {job.source ? (
                   <a href={job.source} target="_blank" rel="noopener noreferrer" className="job-link">
                     查看详情 →
                   </a>
+                ) : (
+                  <span className="job-link" style={{ opacity: 0.5, cursor: 'default' }}>
+                    来源收集中
+                  </span>
                 )}
               </div>
             ))}
@@ -147,7 +174,7 @@ export default function Home({ jobs, stats }) {
       <footer className="footer">
         <div className="container">
           <p className="footer-text">
-            赏金之路 · AI求职情报 · 由 kakasi & 卡卡 构建
+            赏金之路 · <span>AI求职情报</span> · 由 kakasi & 卡卡 构建
           </p>
         </div>
       </footer>
